@@ -3,7 +3,7 @@ import pandas as pd
 import sys
 import os
 
-# Asegurar que encuentre los módulos
+# Configuración de rutas para asegurar que encuentre los módulos en la nube
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from main import run_system, setup_dependencies
@@ -11,129 +11,143 @@ from agents.portfolio_agent import PortfolioAgent
 from agents.backtesting_agent import BacktestingAgent
 from agents.benchmark_agent import BenchmarkAgent
 
-# Configuración de la página para que se vea bien en móviles
+# 1. CONFIGURACIÓN DE PÁGINA (Optimizada para celular)
 st.set_page_config(
-    page_title="AI Investment Terminal", 
+    page_title="Terminal IA - Andrés Rojas", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
 
-# Estilo personalizado para mejorar la estética
+# Estilo visual para que parezca una App nativa
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
-    .stMetric { background-color: #1e2130; padding: 15px; border-radius: 10px; }
+    div[data-testid="stMetricValue"] { font-size: 1.8rem; color: #00ffcc; }
+    .stExpander { border: 1px solid #30363d; border-radius: 8px; }
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🤖 AI Investment Agent Terminal")
-st.caption("Desarrollado por Andrés Rojas - Civil Industrial Engineering")
+st.title("🤖 AI Investment Agent")
+st.caption("Estrategia y Análisis Multi-Agente | Andrés Rojas")
 
-# --- SIDEBAR: Configuración ---
-st.sidebar.header("👤 Configuración")
-risk = st.sidebar.select_slider("Riesgo", options=["low", "medium", "high"])
-capital = st.sidebar.number_input("Capital ($)", value=10000)
-tickers_input = st.sidebar.text_input("Tickers (separados por coma)", "AAPL, MSFT, TSLA")
+# --- SIDEBAR: Ajustes rápidos ---
+st.sidebar.header("⚙️ Configuración")
+risk = st.sidebar.select_slider("Perfil de Riesgo", options=["low", "medium", "high"], value="medium")
+capital = st.sidebar.number_input("Capital Inicial ($)", value=10000, step=1000)
+tickers_input = st.sidebar.text_input("Acciones (ej: AAPL, NVDA, TSLA)", "AAPL, MSFT, TSLA")
 
-if st.sidebar.button("🚀 Iniciar Análisis"):
+# --- LÓGICA DE EJECUCIÓN ---
+if st.sidebar.button("🚀 Ejecutar Análisis"):
     setup_dependencies()
     tickers = [t.strip().upper() for t in tickers_input.split(",")]
     
-    with st.spinner('Agentes analizando mercado...'):
+    with st.spinner('Los agentes están procesando datos en tiempo real...'):
         all_reports = []
         for ticker in tickers:
-            res = run_system(ticker)
-            all_reports.append(res)
-    
-    # ==========================================
-    # 💼 SECCIÓN 1: RESUMEN DE RECOMENDACIONES
-    # ==========================================
-    st.header("🎯 Recomendaciones")
-    cols = st.columns(len(all_reports))
-    for i, res in enumerate(all_reports):
-        with cols[i]:
-            st.metric(
-                label=f"Acción: {res['ticker']}", 
-                value=res['decision']['recommendation'], 
-                delta=f"Confianza: {res['decision']['confidence']}"
-            )
+            try:
+                res = run_system(ticker)
+                all_reports.append(res)
+            except Exception as e:
+                st.error(f"Error analizando {ticker}: {str(e)}")
 
-    # ==========================================
-    # 🔍 SECCIÓN 2: DETALLE PROFUNDO (UI LIMPIA)
-    # ==========================================
-    st.divider()
-    st.header("🔍 Análisis Detallado")
-    
-    # Mapa para limpiar los nombres de los ratios
-    label_map = {
-        "pe": "P/E Ratio",
-        "roe": "ROE (Retorno s/ Patrimonio)",
-        "debt_to_equity": "Deuda / Capital",
-        "revenue_growth": "Crecimiento de Ingresos",
-        "fcf": "Free Cash Flow",
-        "momentum": "Momentum de Precio",
-        "volatility": "Volatilidad"
-    }
+    if all_reports:
+        # ==========================================
+        # 🎯 SECCIÓN 1: MÉTRICAS DE DECISIÓN
+        # ==========================================
+        st.header("🎯 Recomendaciones del Sistema")
+        cols = st.columns(len(all_reports))
+        for i, res in enumerate(all_reports):
+            with cols[i]:
+                st.metric(
+                    label=res['ticker'], 
+                    value=res['decision']['recommendation'], 
+                    delta=f"Confianza: {res['decision']['confidence']}"
+                )
 
-    for res in all_reports:
-        with st.expander(f"📊 Ver reporte completo de {res['ticker']}", expanded=False):
-            col_left, col_right = st.columns([1, 1.5])
-            
-            # --- COLUMNA IZQUIERDA: RATIOS ---
-            with col_left:
-                st.subheader("📉 Ratios Financieros")
-                ratios = res['financials']['ratios']
-                for key, val in ratios.items():
-                    name = label_map.get(key, key.upper())
-                    # Formateo de valores
-                    if "fcf" in key or val > 1000:
-                        val_str = f"${val:,.0f}"
-                    elif "growth" in key or "roe" in key:
-                        val_str = f"{val*100:.2f}%" if val < 1 else f"{val:.2f}"
-                    else:
-                        val_str = f"{val:.2f}"
+        # ==========================================
+        # 🔍 SECCIÓN 2: ANÁLISIS POR ACTIVO
+        # ==========================================
+        st.divider()
+        st.header("🔍 Análisis Detallado")
+        
+        # Diccionario de traducción para ratios
+        label_map = {
+            "pe": "P/E Ratio",
+            "roe": "ROE (Retorno s/ Patrimonio)",
+            "debt_to_equity": "Ratio Deuda / Capital",
+            "revenue_growth": "Crecimiento Ingresos",
+            "fcf": "Free Cash Flow",
+            "momentum": "Momentum (6m)",
+            "volatility": "Volatilidad Anual"
+        }
+
+        for res in all_reports:
+            with st.expander(f"📊 Reporte de {res['ticker']}", expanded=False):
+                col_info, col_news = st.columns([1, 1.2])
+                
+                # --- LADO IZQUIERDO: RATIOS Y EXPLICACIÓN ---
+                with col_info:
+                    st.subheader("📉 Ratios Clave")
+                    r = res['financials']['ratios']
+                    for key, val in r.items():
+                        name = label_map.get(key, key.upper())
+                        # Formateo visual
+                        if "fcf" in key or val > 5000:
+                            v_str = f"${val:,.0f}"
+                        elif val < 1 and val > -1:
+                            v_str = f"{val*100:.2f}%"
+                        else:
+                            v_str = f"{val:.2f}"
+                        st.write(f"**{name}:** {v_str}")
                     
-                    st.write(f"**{name}:** {val_str}")
-                
-                st.info(f"**Explicación IA:** {res['explainability']['explanation']}")
+                    st.markdown("---")
+                    st.markdown("**💡 Insight del Agente:**")
+                    st.info(res['explainability']['explanation'])
 
-            # --- COLUMNA DERECHA: NOTICIAS ---
-            with col_right:
-                st.subheader("📰 Sentimiento del Mercado")
-                score = res['sentiment']['sentiment_score']
-                
-                if score > 0.15:
-                    st.success(f"Sentimiento Positivo: {score:.2f} ✅")
-                elif score < -0.15:
-                    st.error(f"Sentimiento Negativo: {score:.2f} ⚠️")
-                else:
-                    st.warning(f"Sentimiento Neutral: {score:.2f} ⚖️")
-                
-                st.markdown("**Últimas Noticias & Resúmenes:**")
-                for art in res['sentiment']['articles'][:3]:
-                    st.markdown(f"🔹 **[{art['title']}]({art.get('url', '#')})**")
-                    resumen = art.get('description') or "No hay resumen disponible para esta noticia."
-                    st.caption(f"_{resumen}_")
-                    st.divider()
+                # --- LADO DERECHO: NOTICIAS CON LINKS ---
+                with col_news:
+                    st.subheader("📰 Noticias Relacionadas")
+                    score = res['sentiment']['sentiment_score']
+                    
+                    if score > 0.15:
+                        st.success(f"Sentimiento Positivo: {score:.2f} ✅")
+                    elif score < -0.15:
+                        st.error(f"Sentimiento Negativo: {score:.2f} ⚠️")
+                    else:
+                        st.warning(f"Sentimiento Neutral: {score:.2f} ⚖️")
+                    
+                    st.write("Enlaces directos a la fuente:")
+                    for art in res['sentiment']['articles'][:5]:
+                        url = art.get('url') or "https://news.google.com"
+                        st.markdown(f"🔗 **[{art['title']}]({url})**")
+                        source_name = art.get('source', {}).get('name', 'Fuente Web')
+                        st.caption(f"Fuente: {source_name}")
+                        st.divider()
 
-    # ==========================================
-    # 💹 SECCIÓN 3: PORTAFOLIO & BACKTESTING
-    # ==========================================
-    st.divider()
-    st.header("💼 Gestión de Portafolio")
-    
-    p_agent = PortfolioAgent()
-    portfolio_res = p_agent.run(all_reports, capital)
-    
-    bt_agent = BacktestingAgent()
-    bt_res = bt_agent.run(portfolio_res["portfolio"])
-    
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Retorno Portafolio", f"{bt_res['portfolio_return']*100:.2f}%")
-    m2.metric("Sharpe Ratio", f"{bt_res['sharpe_ratio']:.2f}")
-    m3.metric("Volatilidad", f"{bt_res['volatility']:.4f}")
+        # ==========================================
+        # 💼 SECCIÓN 3: RENDIMIENTO Y PORTAFOLIO
+        # ==========================================
+        st.divider()
+        st.header("💼 Gestión de Portafolio")
+        
+        p_agent = PortfolioAgent()
+        portfolio_res = p_agent.run(all_reports, capital)
+        
+        bt_agent = BacktestingAgent()
+        bt_res = bt_agent.run(portfolio_res["portfolio"])
+        
+        bench_agent = BenchmarkAgent()
+        bench_res = bench_agent.run(bt_res["portfolio_return"])
 
-    # Gráfico de distribución
-    st.write("**Distribución Sugerida de Capital:**")
-    df_p = pd.DataFrame(portfolio_res["portfolio"])
-    st.bar_chart(df_p.set_index("ticker")["allocation"])
+        # Métricas Finales
+        m1, m2, m3 = st.columns(3)
+        m1.metric("Retorno Portafolio", f"{bt_res['portfolio_return']*100:.2f}%")
+        m2.metric("Sharpe Ratio", f"{bt_res['sharpe_ratio']:.2f}")
+        m3.metric("Alpha vs S&P500", f"{(bt_res['portfolio_return'] - bench_res['benchmark_return'])*100:.2f}%")
+
+        st.write("**Distribución sugerida:**")
+        df_plot = pd.DataFrame(portfolio_res["portfolio"])
+        st.bar_chart(df_plot.set_index("ticker")["allocation"])
+
+else:
+    st.info("Configura los tickers en el menú lateral y haz clic en 'Iniciar Análisis' para comenzar.")
