@@ -35,7 +35,7 @@ st.caption("Estrategia y Análisis Multi-Agente | Andrés Rojas - Civil Industri
 st.sidebar.header("⚙️ Panel de Control")
 risk = st.sidebar.select_slider("Perfil de Riesgo", options=["low", "medium", "high"], value="medium")
 capital = st.sidebar.number_input("Capital Inicial ($)", value=10000, step=1000)
-tickers_input = st.sidebar.text_input("Acciones (ej: AAPL, NVDA, TSLA)", "AAPL, MSFT, TSLA")
+tickers_input = st.sidebar.text_input("Acciones (ej: AAPL, NVDA, TSLA)", "AAPL, MSFT, NVDA, F")
 
 # --- BOTÓN DE EJECUCIÓN ---
 if st.sidebar.button("🚀 Iniciar Análisis"):
@@ -91,12 +91,21 @@ if st.sidebar.button("🚀 Iniciar Análisis"):
                     r = res['financials'].get('ratios', {})
                     for key, val in r.items():
                         name = label_map.get(key, key.upper())
-                        if "fcf" in key or val > 5000:
-                            v_str = f"${val:,.0f}"
-                        elif -1 < val < 1:
-                            v_str = f"{val*100:.2f}%"
+                        
+                        # --- SOLUCIÓN AL ERROR DE TYPEERROR (VALORES NONE) ---
+                        if val is not None:
+                            try:
+                                if "fcf" in key or (isinstance(val, (int, float)) and val > 5000):
+                                    v_str = f"${val:,.0f}"
+                                elif isinstance(val, (int, float)) and -1 < val < 1:
+                                    v_str = f"{val*100:.2f}%"
+                                else:
+                                    v_str = f"{val:.2f}"
+                            except:
+                                v_str = str(val)
                         else:
-                            v_str = f"{val:.2f}"
+                            v_str = "N/A"
+                        
                         st.write(f"**{name}:** {v_str}")
                     
                     st.markdown("---")
@@ -122,13 +131,11 @@ if st.sidebar.button("🚀 Iniciar Análisis"):
                         st.write("No se encontraron noticias recientes.")
                     else:
                         for art in articles[:5]:
-                            # Extracción segura de datos de la noticia
                             link_real = art.get('url')
                             titulo = art.get('title', 'Noticia sin título')
                             nombre_fuente = art.get('source', {}).get('name', 'Fuente Externa')
 
-                            # Solo renderizamos si hay un link válido
-                            if link_real and link_real.startswith('http'):
+                            if link_real and str(link_real).startswith('http'):
                                 st.markdown(f"🔗 **[{titulo}]({link_real})**")
                                 st.caption(f"Fuente: {nombre_fuente}")
                             else:
@@ -143,7 +150,6 @@ if st.sidebar.button("🚀 Iniciar Análisis"):
         st.divider()
         st.header("💼 Gestión de Portafolio")
         
-        # Invocamos agentes de portafolio y backtest
         p_agent = PortfolioAgent()
         portfolio_res = p_agent.run(all_reports, capital)
         
@@ -153,7 +159,6 @@ if st.sidebar.button("🚀 Iniciar Análisis"):
         bench_agent = BenchmarkAgent()
         bench_res = bench_agent.run(bt_res["portfolio_return"])
 
-        # Métricas de resumen del portafolio
         m1, m2, m3 = st.columns(3)
         m1.metric("Retorno Portafolio", f"{bt_res['portfolio_return']*100:.2f}%")
         m2.metric("Sharpe Ratio", f"{bt_res['sharpe_ratio']:.2f}")
