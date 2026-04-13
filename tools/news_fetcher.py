@@ -1,25 +1,70 @@
 import requests
+import yfinance as yf
 
-API_KEY = "966de9cfce8a4ab18b57222bad462146"
+# ⚠️ Temporal — reemplazar por variable de entorno antes de subir a producción
+NEWS_API_KEY = "966de9cfce8a4ab18b57222bad462146"
 
-def get_news(ticker):
-    url = f"https://newsapi.org/v2/everything?q={ticker}&language=en&pageSize=5&apiKey={API_KEY}"
+
+def get_company_name(ticker: str) -> str:
+    """Obtiene el nombre real de la empresa desde yfinance para cualquier ticker."""
     try:
-        response = requests.get(url)
+        info = yf.Ticker(ticker).info
+        return info.get("longName") or info.get("shortName") or ticker
+    except Exception:
+        return ticker
+
+
+def get_news(ticker: str) -> list:
+    company = get_company_name(ticker)
+    query   = f"{company} stock"
+
+    print(f"[NewsAPI] Buscando noticias para: '{query}'")
+
+    url = (
+        f"https://newsapi.org/v2/everything"
+        f"?q={query}"
+        f"&language=en"
+        f"&pageSize=5"
+        f"&sortBy=publishedAt"
+        f"&apiKey={NEWS_API_KEY}"
+    )
+
+    try:
+        response = requests.get(url, timeout=10)
+
+        if response.status_code == 401:
+            print("[NewsAPI] ERROR 401: API key inválida o expirada.")
+            return []
+        if response.status_code == 429:
+            print("[NewsAPI] ERROR 429: Límite de requests alcanzado.")
+            return []
+        if response.status_code != 200:
+            print(f"[NewsAPI] ERROR {response.status_code}: {response.text[:200]}")
+            return []
+
         data = response.json()
-        
+
         if data.get("status") != "ok":
-            print(f"Error de NewsAPI: {data.get('message')}")
+            print(f"[NewsAPI] Error en respuesta: {data.get('message')}")
             return []
 
         articles = data.get("articles", [])
+
         return [
             {
-                "title": a.get("title", ""),
-                "description": a.get("description", "")
+                "title":       a.get("title", ""),
+                "description": a.get("description", ""),
+                "url":         a.get("url", ""),
+                "source":      a.get("source", {}),
+                "publishedAt": a.get("publishedAt", ""),
             }
             for a in articles
+            if a.get("title")
         ]
+
+    except requests.exceptions.Timeout:
+        print(f"[NewsAPI] Timeout al buscar noticias de '{ticker}'.")
+        return []
     except Exception as e:
-        print(f"Error de conexión en NewsAPI: {e}")
+        print(f"[NewsAPI] Error inesperado: {e}")
         return []

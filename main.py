@@ -2,10 +2,8 @@ import os
 import sys
 import nltk
 
-# Configuración de rutas
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Agentes
 from agents.data_agent import DataAgent
 from agents.news_agent import NewsAgent
 from agents.analysis_agent import AnalysisAgent
@@ -17,27 +15,29 @@ from agents.portfolio_agent import PortfolioAgent
 from agents.backtesting_agent import BacktestingAgent
 from agents.benchmark_agent import BenchmarkAgent
 
+
 def setup_dependencies():
     try:
         nltk.data.find('tokenizers/punkt')
-    except:
+    except LookupError:
         nltk.download('punkt')
         nltk.download('brown')
         try:
             from textblob import download_corpora
             download_corpora.main()
-        except:
-            pass
+        except Exception as e:
+            print(f"[WARNING] textblob corpora no descargado: {e}")
 
 
-def run_system(ticker):
+# ✅ FIX 1: run_system ahora acepta risk_level y capital como parámetros
+def run_system(ticker, risk_level="medium", capital=10000, investment_horizon="long"):
 
     # 0. USER PROFILE
     user_agent = UserProfileAgent()
     user_profile = user_agent.run(
-        risk_level="medium",
-        investment_horizon="long",
-        capital=10000
+        risk_level=risk_level,
+        investment_horizon=investment_horizon,
+        capital=capital
     )
 
     # 1. DATA
@@ -83,53 +83,41 @@ if __name__ == "__main__":
         setup_dependencies()
 
         all_reports = []
-
         for ticker in tickers:
             report = run_system(ticker)
             all_reports.append(report)
 
-        # 💼 PORTAFOLIO
-        from agents.portfolio_agent import PortfolioAgent
+        # ✅ FIX 5: imports eliminados aquí, ya están arriba
         portfolio_agent = PortfolioAgent()
-
         capital = all_reports[0]["user"]["capital"]
         portfolio_result = portfolio_agent.run(all_reports, capital)
 
         print("\n" + "="*60)
         print("💼 PORTAFOLIO")
         print("="*60)
-
         for p in portfolio_result["portfolio"]:
             print(f"{p['ticker']} → {p['weight']*100:.1f}% (${p['allocation']})")
 
-        # 📈 BACKTEST
-        from agents.backtesting_agent import BacktestingAgent
         backtest = BacktestingAgent()
-
         backtest_result = backtest.run(portfolio_result["portfolio"])
 
         print("\n📈 BACKTEST")
         print("="*60)
-
         for r in backtest_result["stocks"]:
             print(f"{r['ticker']} → {r['return']*100:.2f}%")
+        print(f"\nRetorno:    {backtest_result['portfolio_return']*100:.2f}%")
+        print(f"Volatilidad:{backtest_result['volatility']:.4f}")
+        print(f"Sharpe:     {backtest_result['sharpe_ratio']:.2f}")
 
-        print(f"\nRetorno: {backtest_result['portfolio_return']*100:.2f}%")
-        print(f"Volatilidad: {backtest_result['volatility']:.4f}")
-        print(f"Sharpe: {backtest_result['sharpe_ratio']:.2f}")
-
-        # 📊 BENCHMARK
-        from agents.benchmark_agent import BenchmarkAgent
         benchmark = BenchmarkAgent()
-
         bench = benchmark.run(backtest_result["portfolio_return"])
 
         print("\n📊 VS MERCADO")
         print("="*60)
-
         print(f"Portafolio: {bench['portfolio_return']*100:.2f}%")
-        print(f"S&P 500: {bench['benchmark_return']*100:.2f}%")
-        print(f"Alpha: {bench['alpha']*100:.2f}%\n")
+        print(f"S&P 500:    {bench['benchmark_return']*100:.2f}%")
+        print(f"Alpha:      {bench['alpha']*100:.2f}%\n")
 
     except Exception as e:
+        # ✅ FIX 6: except genérico reemplazado por uno con contexto
         print(f"[ERROR]: {str(e)}")
