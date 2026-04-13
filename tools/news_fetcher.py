@@ -18,11 +18,12 @@ def get_news(ticker: str) -> list:
     company = get_company_name(ticker)
     query   = f"{company} stock"
 
-    print(f"[NewsAPI] Buscando noticias para: '{query}'")
+    print(f"[News Fetcher] Buscando noticias para: '{query}'")
 
     url = (
         f"https://newsapi.org/v2/everything"
         f"?q={query}"
+        f"&searchIn=title"          # ✅ FIX: el nombre debe aparecer en el título
         f"&language=en"
         f"&pageSize=5"
         f"&sortBy=publishedAt"
@@ -33,19 +34,19 @@ def get_news(ticker: str) -> list:
         response = requests.get(url, timeout=10)
 
         if response.status_code == 401:
-            print("[NewsAPI] ERROR 401: API key inválida o expirada.")
+            print("[News Fetcher] ERROR 401: API key inválida o expirada.")
             return []
         if response.status_code == 429:
-            print("[NewsAPI] ERROR 429: Límite de requests alcanzado.")
+            print("[News Fetcher] ERROR 429: Límite de requests alcanzado.")
             return []
         if response.status_code != 200:
-            print(f"[NewsAPI] ERROR {response.status_code}: {response.text[:200]}")
+            print(f"[News Fetcher] ERROR {response.status_code}: {response.text[:200]}")
             return []
 
         data = response.json()
 
         if data.get("status") != "ok":
-            print(f"[NewsAPI] Error en respuesta: {data.get('message')}")
+            print(f"[News Fetcher] Error en respuesta: {data.get('message')}")
             return []
 
         articles = data.get("articles", [])
@@ -63,8 +64,8 @@ def get_news(ticker: str) -> list:
         ]
 
     except requests.exceptions.Timeout:
-        print(f"[NewsAPI] Timeout al buscar noticias de '{ticker}'.")
+        print(f"[News Fetcher] Timeout al buscar noticias de '{ticker}'.")
         return []
     except Exception as e:
-        print(f"[NewsAPI] Error inesperado: {e}")
+        print(f"[News Fetcher] Error inesperado: {e}")
         return []
