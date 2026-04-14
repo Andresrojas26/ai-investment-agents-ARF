@@ -1,6 +1,8 @@
-streamlit
+anthropic
 yfinance
-requests
+streamlit
+pandas
+numpy
 textblob
 nltk
-pandas
+requests
