@@ -255,7 +255,7 @@ if run_btn:
                 }
 
     else:
-        from agents.portfolio_builder_agent import PortfolioBuilderAgent
+        from agents.portafolio_builder_agent import PortfolioBuilderAgent
         builder = PortfolioBuilderAgent()
 
         with st.spinner("AI is selecting tickers..."):
