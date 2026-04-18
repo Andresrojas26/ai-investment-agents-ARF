@@ -1,13 +1,17 @@
 import os
 import json
+import streamlit as st
 from groq import Groq
 from agents.base_agent import BaseAgent
 
-# Lee desde Streamlit Secrets (nube) o variable de entorno (local)
+# ✅ Lee desde Streamlit Secrets (nube) o variable de entorno (local)
 try:
     GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except Exception:
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+
+if not GROQ_API_KEY:
+    print("[WARNING] No se encontró GROQ_API_KEY.")
 
 UNIVERSE_BY_RISK = {
     "low": """
@@ -39,11 +43,9 @@ class PortfolioBuilderAgent(BaseAgent):
     def __init__(self):
         super().__init__("Portfolio Builder Agent")
         self.client = Groq(api_key=GROQ_API_KEY)
-        # Llama 3.3 70B — el modelo más capaz en el free tier de Groq
         self.model  = "llama-3.3-70b-versatile"
 
     def _call(self, prompt: str, max_tokens: int = 1000) -> str:
-        """Helper centralizado para llamar a Groq."""
         response = self.client.chat.completions.create(
             model=self.model,
             max_tokens=max_tokens,
@@ -51,7 +53,6 @@ class PortfolioBuilderAgent(BaseAgent):
         )
         return response.choices[0].message.content.strip()
 
-    # ── PASO 1: Groq selecciona los tickers ───────────────────────────────────
     def select_tickers(self, risk_level: str, capital: float, horizon: str = "long", n_stocks: int = 6) -> dict:
         universe = UNIVERSE_BY_RISK.get(risk_level, UNIVERSE_BY_RISK["medium"])
         hor_ctx  = HORIZON_CONTEXT.get(horizon, HORIZON_CONTEXT["long"])
@@ -92,7 +93,6 @@ Solo el JSON puro:
         try:
             raw = self._call(prompt, max_tokens=1000)
 
-            # Limpieza de markdown si el modelo lo incluye
             if "```" in raw:
                 raw = raw.split("```")[1]
                 if raw.startswith("json"):
@@ -115,7 +115,6 @@ Solo el JSON puro:
             print(f"[PortfolioBuilder] Error en select_tickers: {e}")
             raise
 
-    # ── PASO 2: Groq genera narrativa cualitativa final ───────────────────────
     def generate_narrative(
         self,
         reports: list,
