@@ -88,11 +88,11 @@ summary { color: #8b949e !important; }
 .pegy-interpretation { font-size: 0.72rem; color: #484f58; margin-top: 0.15rem; }
 .ai-analysis         { background: #0d1117; border: 1px solid #1e2d3d; border-left: 2px solid #58a6ff; border-radius: 4px; padding: 0.9rem 1rem; font-size: 0.85rem; line-height: 1.6; color: #8b949e; }
 
-.thesis-card { background: #0d1117; border: 1px solid #1e2d3d; border-left: 2px solid #58a6ff; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+.thesis-card  { background: #0d1117; border: 1px solid #1e2d3d; border-left: 2px solid #58a6ff; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
 .thesis-label { font-size: 0.7rem; color: #484f58; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'IBM Plex Mono', monospace; margin-bottom: 0.5rem; }
 .thesis-text  { font-size: 0.9rem; color: #c9d1d9; line-height: 1.6; }
 
-.mode-badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; background: #0d2218; color: #3fb950; border: 1px solid #238636; margin-left: 0.75rem; vertical-align: middle; }
+.mode-badge        { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; background: #0d2218; color: #3fb950; border: 1px solid #238636; margin-left: 0.75rem; vertical-align: middle; }
 .mode-badge-manual { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
 
 section[data-testid="stSidebar"] { background: #0d1117; border-right: 1px solid #1e2d3d; }
@@ -171,6 +171,12 @@ def cached_market_data(tickers_tuple: tuple, risk_level: str) -> list:
 
 
 # ── SESSION STATE ─────────────────────────────────────────────────────────────
+# ✅ FIX: versión de sesión — limpia el estado si el código cambió
+SESSION_VERSION = "2.0"
+if st.session_state.get("session_version") != SESSION_VERSION:
+    st.session_state.clear()
+    st.session_state["session_version"] = SESSION_VERSION
+
 if "all_reports"    not in st.session_state:
     st.session_state.all_reports    = None
 if "portfolio_data" not in st.session_state:
@@ -315,9 +321,8 @@ if st.session_state.all_reports:
     pd_data     = st.session_state.portfolio_data
     is_ai_mode  = pd_data.get("mode") == "ai_builder"
 
-    # ── MODO AI: thesis + rationale + narrativa ───────────────────────────────
+    # ── MODO AI: thesis + rationale ───────────────────────────────────────────
     if is_ai_mode:
-
         if pd_data.get("thesis"):
             st.markdown(f"""
             <div class="thesis-card">
@@ -400,7 +405,7 @@ if st.session_state.all_reports:
         f'<div style="font-size:0.78rem;color:#484f58;margin-bottom:0.75rem;'
         f'font-family:\'IBM Plex Mono\',monospace;">'
         f'Capital: ${capital:,.0f} &nbsp;·&nbsp; Risk: {risk.upper()} '
-        f'&nbsp;·&nbsp; Positions: {pd_data["portfolio_res"]["num_positions"]}'
+        f'&nbsp;·&nbsp; Positions: {pd_data["portfolio_res"].get("num_positions", len(pd_data["portfolio_res"]["portfolio"]))}'
         f'</div>', unsafe_allow_html=True
     )
 
@@ -479,7 +484,7 @@ if st.session_state.all_reports:
     st.markdown(metric_html("Jensen's Alpha", f"{j_alpha:+.2f}%",   positive=j_alpha > 0),    unsafe_allow_html=True)
     st.markdown(metric_html("Portfolio Beta", f"{port_beta:.2f}"),                              unsafe_allow_html=True)
 
-    # ── SECCIÓN 6: NARRATIVA AI (solo modo AI Builder) ────────────────────────
+    # ── SECCIÓN 6: NARRATIVA AI ───────────────────────────────────────────────
     if is_ai_mode and pd_data.get("narrative"):
         st.markdown('<hr class="divider">', unsafe_allow_html=True)
         st.markdown('<div class="section-label">Portfolio Analysis — AI Narrative</div>', unsafe_allow_html=True)
