@@ -3,8 +3,11 @@ import json
 from groq import Groq
 from agents.base_agent import BaseAgent
 
-import os
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+# Lee desde Streamlit Secrets (nube) o variable de entorno (local)
+try:
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except Exception:
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 
 UNIVERSE_BY_RISK = {
     "low": """
