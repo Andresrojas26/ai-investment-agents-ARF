@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from main import run_all_tickers, setup_dependencies
-from agents.portfolio_agent import PortfolioAgent
+from agents.portafolio_builder_agent import PortfolioBuilderAgent
 from agents.backtesting_agent import BacktestingAgent
 from agents.benchmark_agent import BenchmarkAgent
 
