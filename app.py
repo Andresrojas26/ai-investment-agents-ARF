@@ -10,6 +10,7 @@ from main import run_all_tickers, setup_dependencies
 from agents.portafolio_builder_agent import PortfolioBuilderAgent
 from agents.backtesting_agent import BacktestingAgent
 from agents.benchmark_agent import BenchmarkAgent
+from agents.portfolio_agent import PortfolioAgent
 
 # ── CONFIGURACIÓN ─────────────────────────────────────────────────────────────
 st.set_page_config(
