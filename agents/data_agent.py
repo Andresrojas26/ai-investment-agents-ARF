@@ -1,10 +1,11 @@
 import pandas as pd
 import yfinance as yf
 import numpy as np
+from typing import Optional
 from agents.base_agent import BaseAgent
 
 
-def calculate_beta(ticker: str, period: str = "1y") -> float | None:
+def calculate_beta(ticker: str, period: str = "1y") -> Optional[float]:
     """Beta del activo respecto al S&P 500."""
     try:
         stock_hist  = yf.Ticker(ticker).history(period=period)["Close"].pct_change().dropna()
@@ -51,11 +52,11 @@ class DataAgent(BaseAgent):
                 hist["Close"].pct_change().std() * (252 ** 0.5), 4
             )
 
-            # Debt/Equity normalizado (yfinance lo entrega en %)
+            # Debt/Equity normalizado
             raw_de         = info.get("debtToEquity")
             debt_to_equity = round(raw_de / 100, 4) if raw_de is not None else None
 
-            # ✅ Beta vs S&P 500
+            # Beta vs S&P 500
             beta = calculate_beta(ticker)
 
             # Campos para PEGY
@@ -76,17 +77,17 @@ class DataAgent(BaseAgent):
             }
 
             return {
-                "ratios":                  ratios,
+                "ratios":                   ratios,
                 "financial_health_summary": "Data retrieved successfully"
             }
 
         except ValueError as e:
             return {
-                "ratios":                  {},
+                "ratios":                   {},
                 "financial_health_summary": f"Error de datos: {str(e)}"
             }
         except Exception as e:
             return {
-                "ratios":                  {},
+                "ratios":                   {},
                 "financial_health_summary": f"Error inesperado al procesar '{ticker}': {str(e)}"
             }

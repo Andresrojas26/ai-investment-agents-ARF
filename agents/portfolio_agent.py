@@ -1,5 +1,6 @@
 import pandas as pd
 import yfinance as yf
+from typing import Optional
 from agents.base_agent import BaseAgent
 
 
@@ -9,10 +10,10 @@ RISK_PROFILES = {
     "high":   {"max_weight": 0.50, "hold_penalty": 0.90, "vol_power": 0.5, "min_positions": 1, "floor_weight": 0.0},
 }
 
-CORRELATION_THRESHOLD = 0.80   # si dos activos tienen correlación > 0.8, reducimos el de menor score
+CORRELATION_THRESHOLD = 0.80
 
 
-def get_correlation_matrix(tickers: list, period: str = "6mo") -> pd.DataFrame | None:
+def get_correlation_matrix(tickers: list, period: str = "6mo") -> Optional[pd.DataFrame]:
     """Descarga retornos y calcula matriz de correlación entre activos."""
     try:
         data = {}
@@ -66,6 +67,7 @@ class PortfolioAgent(BaseAgent):
                 "portfolio":  [],
                 "message":    "No opportunities found for current risk profile.",
                 "risk_level": risk_level,
+                "num_positions": 0,
             }
 
         candidates = sorted(candidates, key=lambda x: x["score"], reverse=True)
@@ -83,14 +85,12 @@ class PortfolioAgent(BaseAgent):
                     if t1 in corr_matrix.columns and t2 in corr_matrix.columns:
                         corr = abs(corr_matrix.loc[t1, t2])
                         if corr > CORRELATION_THRESHOLD:
-                            # Penalizar el de menor score (índice j, ya ordenado desc)
                             penalized.add(t2)
 
             for c in candidates:
                 if c["ticker"] in penalized:
-                    c["score"] *= 0.6   # reduce su influencia en el portafolio
+                    c["score"] *= 0.6
 
-            # Reordenar tras penalización
             candidates = sorted(candidates, key=lambda x: x["score"], reverse=True)
 
         # ── PASO 3: Calcular pesos base ───────────────────────────────────
