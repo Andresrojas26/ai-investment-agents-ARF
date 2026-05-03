@@ -32,22 +32,70 @@ html, body, [class*="css"] {
 .block-container { padding-top: 2rem; padding-bottom: 3rem; }
 #MainMenu, footer, header { visibility: hidden; }
 
-.terminal-header    { border-bottom: 1px solid #1e2d3d; padding-bottom: 1.2rem; margin-bottom: 2rem; }
-.terminal-title     { font-family: 'IBM Plex Mono', monospace; font-size: 1.1rem; font-weight: 500; color: #58a6ff; letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
-.terminal-subtitle  { font-size: 0.78rem; color: #484f58; margin-top: 0.3rem; letter-spacing: 0.04em; text-transform: uppercase; }
+/* Ocultar sidebar completamente */
+section[data-testid="stSidebar"] { display: none; }
+
+.terminal-header   { border-bottom: 1px solid #1e2d3d; padding-bottom: 1.2rem; margin-bottom: 2rem; }
+.terminal-title    { font-family: 'IBM Plex Mono', monospace; font-size: 1.1rem; font-weight: 500; color: #58a6ff; letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
+.terminal-subtitle { font-size: 0.78rem; color: #484f58; margin-top: 0.3rem; letter-spacing: 0.04em; text-transform: uppercase; }
 
 .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500; color: #484f58; letter-spacing: 0.12em; text-transform: uppercase; border-left: 2px solid #1e2d3d; padding-left: 0.6rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+
+/* ── MODE CARDS ── */
+.mode-select-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: #484f58;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+.mode-card {
+    background: #0d1117;
+    border: 1px solid #1e2d3d;
+    border-radius: 6px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    height: 100%;
+}
+.mode-card:hover  { border-color: #58a6ff; }
+.mode-card-active { border-color: #1f6feb !important; background: #0d1f38; }
+.mode-card-title  { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; font-weight: 500; color: #e6edf3; margin-bottom: 0.5rem; }
+.mode-card-desc   { font-size: 0.8rem; color: #484f58; line-height: 1.5; }
+.mode-card-badge  { display: inline-block; margin-top: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; }
+.mode-card-badge-manual { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
+.mode-card-badge-ai     { background: #0d2218; color: #3fb950; border: 1px solid #238636; }
+
+/* ── PARAMS PANEL ── */
+.params-panel {
+    background: #0d1117;
+    border: 1px solid #1e2d3d;
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.params-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: #484f58;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #1e2d3d;
+    padding-bottom: 0.5rem;
+}
 
 .rank-card       { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
 .rank-number     { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #484f58; min-width: 2rem; }
 .rank-ticker     { font-family: 'IBM Plex Mono', monospace; font-size: 1rem; font-weight: 500; color: #e6edf3; min-width: 5rem; }
 .rank-confidence { font-size: 0.75rem; color: #484f58; font-family: 'IBM Plex Mono', monospace; }
 
-.badge          { display: inline-block; padding: 0.2rem 0.75rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; }
-.badge-buy      { background: #0d2218; color: #3fb950; border: 1px solid #238636; }
-.badge-sell     { background: #2d0f0f; color: #f85149; border: 1px solid #da3633; }
-.badge-hold     { background: #1f1a0a; color: #d29922; border: 1px solid #9e6a03; }
-.badge-neutral  { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
+.badge         { display: inline-block; padding: 0.2rem 0.75rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; }
+.badge-buy     { background: #0d2218; color: #3fb950; border: 1px solid #238636; }
+.badge-sell    { background: #2d0f0f; color: #f85149; border: 1px solid #da3633; }
+.badge-hold    { background: #1f1a0a; color: #d29922; border: 1px solid #9e6a03; }
+.badge-neutral { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
 
 .ratio-row   { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #0d1117; font-size: 0.88rem; }
 .ratio-label { color: #8b949e; font-size: 0.82rem; }
@@ -57,8 +105,8 @@ html, body, [class*="css"] {
 .value-neutral  { color: #e6edf3; }
 .value-warning  { color: #d29922; }
 
-.metric-block { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 0.5rem; }
-.metric-label { font-size: 0.72rem; color: #484f58; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'IBM Plex Mono', monospace; margin-bottom: 0.3rem; }
+.metric-block          { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 0.5rem; }
+.metric-label          { font-size: 0.72rem; color: #484f58; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'IBM Plex Mono', monospace; margin-bottom: 0.3rem; }
 .metric-value          { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 500; color: #e6edf3; }
 .metric-value-positive { color: #3fb950; }
 .metric-value-negative { color: #f85149; }
@@ -96,8 +144,19 @@ summary { color: #8b949e !important; }
 .mode-badge        { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; background: #0d2218; color: #3fb950; border: 1px solid #238636; margin-left: 0.75rem; vertical-align: middle; }
 .mode-badge-manual { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
 
-section[data-testid="stSidebar"] { background: #0d1117; border-right: 1px solid #1e2d3d; }
-.stButton > button { background: #1f6feb; color: #ffffff; border: none; border-radius: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.04em; padding: 0.5rem 1rem; width: 100%; transition: background 0.15s; }
+/* Botones principales */
+.stButton > button {
+    background: #1f6feb;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    transition: background 0.15s;
+}
 .stButton > button:hover { background: #388bfd; }
 </style>
 """, unsafe_allow_html=True)
@@ -141,10 +200,10 @@ def color_value(val, key="") -> str:
         return f'<span class="ratio-value value-neutral">{val}</span>'
 
 def metric_html(label: str, value: str, positive: bool = None, warning: bool = False) -> str:
-    if warning:              css = "metric-value-warning"
-    elif positive is True:   css = "metric-value-positive"
-    elif positive is False:  css = "metric-value-negative"
-    else:                    css = ""
+    if warning:             css = "metric-value-warning"
+    elif positive is True:  css = "metric-value-positive"
+    elif positive is False: css = "metric-value-negative"
+    else:                   css = ""
     return f"""
     <div class="metric-block">
         <div class="metric-label">{label}</div>
@@ -172,16 +231,14 @@ def cached_market_data(tickers_tuple: tuple, risk_level: str) -> list:
 
 
 # ── SESSION STATE ─────────────────────────────────────────────────────────────
-# ✅ FIX: versión de sesión — limpia el estado si el código cambió
-SESSION_VERSION = "2.0"
+SESSION_VERSION = "3.0"
 if st.session_state.get("session_version") != SESSION_VERSION:
     st.session_state.clear()
     st.session_state["session_version"] = SESSION_VERSION
 
-if "all_reports"    not in st.session_state:
-    st.session_state.all_reports    = None
-if "portfolio_data" not in st.session_state:
-    st.session_state.portfolio_data = None
+if "mode"           not in st.session_state: st.session_state.mode           = None
+if "all_reports"    not in st.session_state: st.session_state.all_reports    = None
+if "portfolio_data" not in st.session_state: st.session_state.portfolio_data = None
 
 
 # ── HEADER ────────────────────────────────────────────────────────────────────
@@ -193,42 +250,67 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── SIDEBAR ───────────────────────────────────────────────────────────────────
-st.sidebar.markdown("**PARAMETERS**")
+# ── SELECCIÓN DE MODO ─────────────────────────────────────────────────────────
+st.markdown('<div class="mode-select-label">Select Analysis Mode</div>', unsafe_allow_html=True)
 
-mode = st.sidebar.radio(
-    "Analysis Mode",
-    options=["Manual — Select tickers", "AI Builder — Auto portfolio"],
-    index=0
-)
+col_manual, col_ai = st.columns(2)
 
-risk    = st.sidebar.select_slider("Risk Profile", options=["low", "medium", "high"], value="medium")
-capital = st.sidebar.number_input("Initial Capital ($)", value=10000, step=1000)
+with col_manual:
+    manual_active = "mode-card-active" if st.session_state.mode == "manual" else ""
+    st.markdown(f"""
+    <div class="mode-card {manual_active}">
+        <div class="mode-card-title">Manual Analysis</div>
+        <div class="mode-card-desc">Select your own tickers and run a full quantitative analysis on each asset.</div>
+        <span class="mode-card-badge mode-card-badge-manual">Manual</span>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Select Manual", key="btn_manual", use_container_width=True):
+        st.session_state.mode        = "manual"
+        st.session_state.all_reports = None
+        st.session_state.portfolio_data = None
+        st.rerun()
 
-tickers_input = ""
-horizon       = "long"
-n_stocks      = 6
+with col_ai:
+    ai_active = "mode-card-active" if st.session_state.mode == "ai_builder" else ""
+    st.markdown(f"""
+    <div class="mode-card {ai_active}">
+        <div class="mode-card-title">AI Builder</div>
+        <div class="mode-card-desc">Let the AI select and build a diversified portfolio based on your risk profile.</div>
+        <span class="mode-card-badge mode-card-badge-ai">AI Powered</span>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Select AI Builder", key="btn_ai", use_container_width=True):
+        st.session_state.mode        = "ai_builder"
+        st.session_state.all_reports = None
+        st.session_state.portfolio_data = None
+        st.rerun()
 
-if mode == "Manual — Select tickers":
-    tickers_input = st.sidebar.text_input("Tickers", "AAPL, MSFT, NVDA, F")
-else:
-    horizon  = st.sidebar.select_slider("Investment Horizon", options=["short", "medium", "long"], value="long")
-    n_stocks = st.sidebar.slider("Number of positions", min_value=4, max_value=10, value=6)
-
-run_btn = st.sidebar.button("RUN ANALYSIS")
+st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
 
-# ── EJECUCIÓN ─────────────────────────────────────────────────────────────────
-if run_btn:
-    setup_dependencies()
+# ── PARÁMETROS Y EJECUCIÓN ────────────────────────────────────────────────────
+if st.session_state.mode == "manual":
 
-    if mode == "Manual — Select tickers":
+    st.markdown('<div class="params-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:0.7rem;color:#484f58;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Parameters — Manual</div>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        risk    = st.select_slider("Risk Profile", options=["low", "medium", "high"], value="medium")
+    with col2:
+        capital = st.number_input("Initial Capital ($)", value=10000, step=1000)
+
+    tickers_input = st.text_input("Tickers (e.g. AAPL, MSFT, NVDA)", "AAPL, MSFT, NVDA, F")
+
+    run_btn = st.button("RUN ANALYSIS", key="run_manual", use_container_width=True)
+
+    if run_btn:
+        setup_dependencies()
         valid_tickers, invalid_tickers = parse_tickers(tickers_input)
 
         if invalid_tickers:
-            st.sidebar.warning(f"Ignored: {', '.join(invalid_tickers)}")
+            st.warning(f"Ignored invalid tickers: {', '.join(invalid_tickers)}")
         if not valid_tickers:
-            st.sidebar.error("No valid tickers.")
+            st.error("No valid tickers to analyze.")
             st.stop()
 
         with st.spinner("Processing..."):
@@ -253,10 +335,27 @@ if run_btn:
                     "narrative":      None,
                     "ticker_details": [],
                     "thesis":         "",
+                    "capital":        capital,
+                    "risk":           risk,
                 }
+                st.rerun()
 
-    else:
-        from agents.portafolio_builder_agent import PortfolioBuilderAgent
+elif st.session_state.mode == "ai_builder":
+
+    st.markdown('<div style="font-family:\'IBM Plex Mono\',monospace;font-size:0.7rem;color:#484f58;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Parameters — AI Builder</div>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        risk    = st.select_slider("Risk Profile", options=["low", "medium", "high"], value="medium")
+        horizon = st.select_slider("Investment Horizon", options=["short", "medium", "long"], value="long")
+    with col2:
+        capital  = st.number_input("Initial Capital ($)", value=10000, step=1000)
+        n_stocks = st.slider("Number of positions", min_value=4, max_value=10, value=6)
+
+    run_btn = st.button("RUN AI ANALYSIS", key="run_ai", use_container_width=True)
+
+    if run_btn:
+        setup_dependencies()
         builder = PortfolioBuilderAgent()
 
         with st.spinner("AI is selecting tickers..."):
@@ -275,9 +374,9 @@ if run_btn:
         ticker_details = selection["ticker_details"]
         thesis         = selection["portfolio_thesis"]
 
-        st.sidebar.success(f"Selected: {', '.join(tickers)}")
+        st.info(f"AI selected: {', '.join(tickers)}")
 
-        with st.spinner("Running full analysis on selected tickers..."):
+        with st.spinner("Running full analysis..."):
             reports = cached_market_data(tuple(tickers), risk)
 
             if reports:
@@ -313,7 +412,20 @@ if run_btn:
             "narrative":      narrative,
             "ticker_details": ticker_details,
             "thesis":         thesis,
+            "capital":        capital,
+            "risk":           risk,
         }
+        st.rerun()
+
+else:
+    # ── PANTALLA INICIAL: sin modo seleccionado ───────────────────────────────
+    st.markdown("""
+    <div style="text-align:center;padding:2rem 0;color:#484f58;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;letter-spacing:0.06em;">
+            Select a mode above to begin
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ── RESULTADOS ────────────────────────────────────────────────────────────────
@@ -321,6 +433,16 @@ if st.session_state.all_reports:
     all_reports = st.session_state.all_reports
     pd_data     = st.session_state.portfolio_data
     is_ai_mode  = pd_data.get("mode") == "ai_builder"
+    capital     = pd_data.get("capital", 10000)
+    risk        = pd_data.get("risk", "medium")
+
+    # Botón para resetear y volver a elegir
+    if st.button("← New Analysis", key="reset_btn"):
+        st.session_state.all_reports    = None
+        st.session_state.portfolio_data = None
+        st.rerun()
+
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
     # ── MODO AI: thesis + rationale ───────────────────────────────────────────
     if is_ai_mode:
@@ -355,10 +477,7 @@ if st.session_state.all_reports:
         '<span class="mode-badge">AI Builder</span>' if is_ai_mode
         else '<span class="mode-badge mode-badge-manual">Manual</span>'
     )
-    st.markdown(
-        f'<div class="section-label">Recommendations {mode_badge_html}</div>',
-        unsafe_allow_html=True
-    )
+    st.markdown(f'<div class="section-label">Recommendations {mode_badge_html}</div>', unsafe_allow_html=True)
 
     sorted_reports = sorted(
         all_reports,
@@ -418,16 +537,13 @@ if st.session_state.all_reports:
         st.markdown(f"""
         <div class="portfolio-row">
             <div>
-                <span style="font-size:0.72rem;color:#484f58;
-                             font-family:'IBM Plex Mono',monospace;">#{i+1} &nbsp;</span>
+                <span style="font-size:0.72rem;color:#484f58;font-family:'IBM Plex Mono',monospace;">#{i+1} &nbsp;</span>
                 <span class="portfolio-ticker">{p['ticker']}</span>
-                <span style="font-size:0.72rem;color:#484f58;
-                             font-family:'IBM Plex Mono',monospace;">&nbsp; β {beta_str}</span>
+                <span style="font-size:0.72rem;color:#484f58;font-family:'IBM Plex Mono',monospace;">&nbsp; β {beta_str}</span>
             </div>
             <div style="text-align:right;">
                 <span class="portfolio-alloc">{pct:.1f}%</span>
-                <span style="font-size:0.78rem;color:#484f58;
-                             font-family:'IBM Plex Mono',monospace;"> &nbsp; ${alloc:,.0f}</span>
+                <span style="font-size:0.78rem;color:#484f58;font-family:'IBM Plex Mono',monospace;"> &nbsp; ${alloc:,.0f}</span>
             </div>
         </div>
         <div class="portfolio-bar-bg">
@@ -479,11 +595,11 @@ if st.session_state.all_reports:
     j_alpha    = bench_res['jensens_alpha'] * 100
     port_beta  = bench_res.get('portfolio_beta', 1.0)
 
-    st.markdown(metric_html("Portfolio",      f"{p_ret:+.2f}%",     positive=p_ret > 0),      unsafe_allow_html=True)
-    st.markdown(metric_html("S&P 500",        f"{b_ret:+.2f}%",     positive=b_ret > 0),      unsafe_allow_html=True)
-    st.markdown(metric_html("Alpha (simple)", f"{alpha_val:+.2f}%", positive=alpha_val > 0),  unsafe_allow_html=True)
-    st.markdown(metric_html("Jensen's Alpha", f"{j_alpha:+.2f}%",   positive=j_alpha > 0),    unsafe_allow_html=True)
-    st.markdown(metric_html("Portfolio Beta", f"{port_beta:.2f}"),                              unsafe_allow_html=True)
+    st.markdown(metric_html("Portfolio",      f"{p_ret:+.2f}%",     positive=p_ret > 0),     unsafe_allow_html=True)
+    st.markdown(metric_html("S&P 500",        f"{b_ret:+.2f}%",     positive=b_ret > 0),     unsafe_allow_html=True)
+    st.markdown(metric_html("Alpha (simple)", f"{alpha_val:+.2f}%", positive=alpha_val > 0), unsafe_allow_html=True)
+    st.markdown(metric_html("Jensen's Alpha", f"{j_alpha:+.2f}%",   positive=j_alpha > 0),   unsafe_allow_html=True)
+    st.markdown(metric_html("Portfolio Beta", f"{port_beta:.2f}"),                             unsafe_allow_html=True)
 
     # ── SECCIÓN 6: NARRATIVA AI ───────────────────────────────────────────────
     if is_ai_mode and pd_data.get("narrative"):
@@ -545,7 +661,6 @@ if st.session_state.all_reports:
                 )
 
             st.markdown("<br>", unsafe_allow_html=True)
-
             st.markdown(
                 '<div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;'
                 'letter-spacing:0.08em;font-family:\'IBM Plex Mono\',monospace;'
@@ -605,12 +720,3 @@ if st.session_state.all_reports:
                         <div class="news-meta">{fuente} &nbsp;·&nbsp; {published}</div>
                     </div>
                     """, unsafe_allow_html=True)
-
-else:
-    st.markdown("""
-    <div style="text-align:center;padding:4rem 0;color:#484f58;">
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.85rem;letter-spacing:0.08em;">
-            Configure parameters and run analysis
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
