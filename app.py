@@ -41,50 +41,17 @@ section[data-testid="stSidebar"] { display: none; }
 
 .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500; color: #484f58; letter-spacing: 0.12em; text-transform: uppercase; border-left: 2px solid #1e2d3d; padding-left: 0.6rem; margin-bottom: 1rem; margin-top: 0.5rem; }
 
-/* ── MODE CARDS ── */
-.mode-select-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: #484f58;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-}
-.mode-card {
-    background: #0d1117;
-    border: 1px solid #1e2d3d;
-    border-radius: 6px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: border-color 0.15s;
-    height: 100%;
-}
-.mode-card:hover  { border-color: #58a6ff; }
-.mode-card-active { border-color: #1f6feb !important; background: #0d1f38; }
-.mode-card-title  { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; font-weight: 500; color: #e6edf3; margin-bottom: 0.5rem; }
-.mode-card-desc   { font-size: 0.8rem; color: #484f58; line-height: 1.5; }
-.mode-card-badge  { display: inline-block; margin-top: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; }
+.mode-select-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: #484f58; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+.mode-card         { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 6px; padding: 1.5rem; cursor: pointer; transition: border-color 0.15s; height: 100%; }
+.mode-card:hover   { border-color: #58a6ff; }
+.mode-card-active  { border-color: #1f6feb !important; background: #0d1f38; }
+.mode-card-title   { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; font-weight: 500; color: #e6edf3; margin-bottom: 0.5rem; }
+.mode-card-desc    { font-size: 0.8rem; color: #484f58; line-height: 1.5; }
+.mode-card-badge   { display: inline-block; margin-top: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; }
 .mode-card-badge-manual { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
 .mode-card-badge-ai     { background: #0d2218; color: #3fb950; border: 1px solid #238636; }
 
-/* ── PARAMS PANEL ── */
-.params-panel {
-    background: #0d1117;
-    border: 1px solid #1e2d3d;
-    border-radius: 6px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
-}
-.params-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: #484f58;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #1e2d3d;
-    padding-bottom: 0.5rem;
-}
+.params-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: #484f58; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
 
 .rank-card       { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
 .rank-number     { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #484f58; min-width: 2rem; }
@@ -128,6 +95,8 @@ section[data-testid="stSidebar"] { display: none; }
 .news-sentiment-neg { color: #f85149; font-size: 0.72rem; }
 .news-sentiment-neu { color: #d29922; font-size: 0.72rem; }
 
+.key-event-card { background: #0d1117; border: 1px solid #1e2d3d; border-radius: 4px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; }
+
 .stExpander { background: #0d1117 !important; border: 1px solid #1e2d3d !important; border-radius: 4px !important; margin-bottom: 0.5rem !important; }
 summary { color: #8b949e !important; }
 .divider { border: none; border-top: 1px solid #1e2d3d; margin: 2rem 0; }
@@ -144,19 +113,7 @@ summary { color: #8b949e !important; }
 .mode-badge        { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; background: #0d2218; color: #3fb950; border: 1px solid #238636; margin-left: 0.75rem; vertical-align: middle; }
 .mode-badge-manual { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
 
-/* Botones principales */
-.stButton > button {
-    background: #1f6feb;
-    color: #ffffff;
-    border: none;
-    border-radius: 3px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    padding: 0.5rem 1rem;
-    width: 100%;
-    transition: background 0.15s;
-}
+.stButton > button { background: #1f6feb; color: #ffffff; border: none; border-radius: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; letter-spacing: 0.04em; padding: 0.5rem 1rem; width: 100%; transition: background 0.15s; }
 .stButton > button:hover { background: #388bfd; }
 </style>
 """, unsafe_allow_html=True)
@@ -231,7 +188,7 @@ def cached_market_data(tickers_tuple: tuple, risk_level: str) -> list:
 
 
 # ── SESSION STATE ─────────────────────────────────────────────────────────────
-SESSION_VERSION = "3.0"
+SESSION_VERSION = "4.0"
 if st.session_state.get("session_version") != SESSION_VERSION:
     st.session_state.clear()
     st.session_state["session_version"] = SESSION_VERSION
@@ -260,13 +217,13 @@ with col_manual:
     st.markdown(f"""
     <div class="mode-card {manual_active}">
         <div class="mode-card-title">Manual Analysis</div>
-        <div class="mode-card-desc">Select your own tickers and run a full quantitative analysis on each asset.</div>
+        <div class="mode-card-desc">Select your own tickers and run a full quantitative and qualitative analysis on each asset.</div>
         <span class="mode-card-badge mode-card-badge-manual">Manual</span>
     </div>
     """, unsafe_allow_html=True)
     if st.button("Select Manual", key="btn_manual", use_container_width=True):
-        st.session_state.mode        = "manual"
-        st.session_state.all_reports = None
+        st.session_state.mode           = "manual"
+        st.session_state.all_reports    = None
         st.session_state.portfolio_data = None
         st.rerun()
 
@@ -275,13 +232,13 @@ with col_ai:
     st.markdown(f"""
     <div class="mode-card {ai_active}">
         <div class="mode-card-title">AI Builder</div>
-        <div class="mode-card-desc">Let the AI select and build a diversified portfolio based on your risk profile.</div>
+        <div class="mode-card-desc">Let the AI select and build a diversified portfolio based on your risk profile and investment horizon.</div>
         <span class="mode-card-badge mode-card-badge-ai">AI Powered</span>
     </div>
     """, unsafe_allow_html=True)
     if st.button("Select AI Builder", key="btn_ai", use_container_width=True):
-        st.session_state.mode        = "ai_builder"
-        st.session_state.all_reports = None
+        st.session_state.mode           = "ai_builder"
+        st.session_state.all_reports    = None
         st.session_state.portfolio_data = None
         st.rerun()
 
@@ -291,7 +248,7 @@ st.markdown('<hr class="divider">', unsafe_allow_html=True)
 # ── PARÁMETROS Y EJECUCIÓN ────────────────────────────────────────────────────
 if st.session_state.mode == "manual":
 
-    st.markdown('<div class="params-title" style="font-family:\'IBM Plex Mono\',monospace;font-size:0.7rem;color:#484f58;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Parameters — Manual</div>', unsafe_allow_html=True)
+    st.markdown('<div class="params-title">Parameters — Manual</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -300,8 +257,7 @@ if st.session_state.mode == "manual":
         capital = st.number_input("Initial Capital ($)", value=10000, step=1000)
 
     tickers_input = st.text_input("Tickers (e.g. AAPL, MSFT, NVDA)", "AAPL, MSFT, NVDA, F")
-
-    run_btn = st.button("RUN ANALYSIS", key="run_manual", use_container_width=True)
+    run_btn       = st.button("RUN ANALYSIS", key="run_manual", use_container_width=True)
 
     if run_btn:
         setup_dependencies()
@@ -342,7 +298,7 @@ if st.session_state.mode == "manual":
 
 elif st.session_state.mode == "ai_builder":
 
-    st.markdown('<div style="font-family:\'IBM Plex Mono\',monospace;font-size:0.7rem;color:#484f58;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Parameters — AI Builder</div>', unsafe_allow_html=True)
+    st.markdown('<div class="params-title">Parameters — AI Builder</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -418,7 +374,6 @@ elif st.session_state.mode == "ai_builder":
         st.rerun()
 
 else:
-    # ── PANTALLA INICIAL: sin modo seleccionado ───────────────────────────────
     st.markdown("""
     <div style="text-align:center;padding:2rem 0;color:#484f58;">
         <div style="font-family:'IBM Plex Mono',monospace;font-size:0.82rem;letter-spacing:0.06em;">
@@ -436,7 +391,6 @@ if st.session_state.all_reports:
     capital     = pd_data.get("capital", 10000)
     risk        = pd_data.get("risk", "medium")
 
-    # Botón para resetear y volver a elegir
     if st.button("← New Analysis", key="reset_btn"):
         st.session_state.all_reports    = None
         st.session_state.portfolio_data = None
@@ -463,8 +417,7 @@ if st.session_state.all_reports:
                 <div class="ratio-row">
                     <span style="font-family:'IBM Plex Mono',monospace;font-weight:500;
                                  color:#e6edf3;min-width:5rem;">{t['ticker']}</span>
-                    <span style="font-size:0.72rem;color:#484f58;
-                                 min-width:8rem;">{t['sector']}</span>
+                    <span style="font-size:0.72rem;color:#484f58;min-width:8rem;">{t['sector']}</span>
                     <span style="font-size:0.82rem;color:#8b949e;text-align:right;
                                  flex:1;padding-left:1rem;">{t['rationale']}</span>
                 </div>
@@ -620,6 +573,7 @@ if st.session_state.all_reports:
         label = f"{res['ticker']}  ·  {rec}"
         with st.expander(label, expanded=False):
 
+            # ── Ratios ────────────────────────────────────────────────────────
             st.markdown(
                 '<div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;'
                 'letter-spacing:0.08em;font-family:\'IBM Plex Mono\',monospace;'
@@ -636,6 +590,7 @@ if st.session_state.all_reports:
                 </div>
                 """, unsafe_allow_html=True)
 
+            # ── PEGY ──────────────────────────────────────────────────────────
             pegy = res['analysis'].get('pegy')
             if pegy is not None:
                 if pegy < 1:
@@ -661,6 +616,8 @@ if st.session_state.all_reports:
                 )
 
             st.markdown("<br>", unsafe_allow_html=True)
+
+            # ── AI Analysis ───────────────────────────────────────────────────
             st.markdown(
                 '<div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;'
                 'letter-spacing:0.08em;font-family:\'IBM Plex Mono\',monospace;'
@@ -674,21 +631,69 @@ if st.session_state.all_reports:
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            score      = res['sentiment']['sentiment_score']
-            sent_css   = "value-positive" if score > 0.15 else ("value-negative" if score < -0.15 else "value-warning")
-            sent_label = "POSITIVE"        if score > 0.15 else ("NEGATIVE"       if score < -0.15 else "NEUTRAL")
+            # ── News Sentiment ────────────────────────────────────────────────
+            score        = res['sentiment']['sentiment_score']
+            sent_css     = "value-positive" if score > 0.15 else ("value-negative" if score < -0.15 else "value-warning")
+            sent_label   = "POSITIVE"        if score > 0.15 else ("NEGATIVE"       if score < -0.15 else "NEUTRAL")
+            company_name = res['sentiment'].get('company_name', res['ticker'])
 
             st.markdown(f"""
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
                 <div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;
                             letter-spacing:0.08em;font-family:'IBM Plex Mono',monospace;">
-                    News Sentiment
+                    News Sentiment — {company_name}
                 </div>
                 <span class="ratio-value {sent_css}" style="font-size:0.8rem;">
                     {sent_label} &nbsp; {score:+.2f}
                 </span>
             </div>
             """, unsafe_allow_html=True)
+
+            # ── Key Events (nuevo — análisis de Groq) ─────────────────────────
+            key_events = res['sentiment'].get('key_events', [])
+            if key_events:
+                st.markdown(
+                    '<div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;'
+                    'letter-spacing:0.08em;font-family:\'IBM Plex Mono\',monospace;'
+                    'margin-bottom:0.5rem;margin-top:0.75rem;">Key Events</div>',
+                    unsafe_allow_html=True
+                )
+                for ev in key_events:
+                    ev_sent = ev.get('sentiment', 'neutral')
+                    ev_css  = "value-positive" if ev_sent == "positive" else ("value-negative" if ev_sent == "negative" else "value-warning")
+                    cat     = ev.get('category', 'other').upper()
+                    insight = ev.get('insight', '')
+                    title   = ev.get('title', '')
+                    url     = ev.get('url', '')
+                    ev_score = ev.get('score', 0)
+
+                    link_html = (
+                        f'<a href="{url}" target="_blank" style="color:#58a6ff;font-size:0.82rem;text-decoration:none;">{title}</a>'
+                        if url.startswith('http')
+                        else f'<span style="color:#8b949e;font-size:0.82rem;">{title}</span>'
+                    )
+
+                    st.markdown(f"""
+                    <div class="key-event-card">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;">
+                            <div style="flex:1;padding-right:0.5rem;">{link_html}</div>
+                            <span class="ratio-value {ev_css}" style="font-size:0.75rem;white-space:nowrap;">
+                                {ev_score:+.2f}
+                            </span>
+                        </div>
+                        <div style="font-size:0.7rem;color:#484f58;font-family:'IBM Plex Mono',monospace;
+                                    margin-bottom:0.4rem;">{cat}</div>
+                        <div style="font-size:0.82rem;color:#8b949e;line-height:1.5;">{insight}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+            # ── All Recent News ───────────────────────────────────────────────
+            st.markdown(
+                '<div style="font-size:0.72rem;color:#484f58;text-transform:uppercase;'
+                'letter-spacing:0.08em;font-family:\'IBM Plex Mono\',monospace;'
+                'margin-top:1rem;margin-bottom:0.5rem;">All Recent News</div>',
+                unsafe_allow_html=True
+            )
 
             articles = res['sentiment'].get('articles', [])
             if not articles:
@@ -697,12 +702,13 @@ if st.session_state.all_reports:
                     unsafe_allow_html=True
                 )
             else:
-                for art in articles[:5]:
+                for art in articles:
                     link      = art.get('url', '')
                     titulo    = art.get('title', 'No title')
                     fuente    = art.get('source', {}).get('name', 'Unknown')
                     published = art.get('publishedAt', '')[:10]
                     art_sent  = art.get('sentiment', 'neutral')
+                    cat       = art.get('category', '').upper()
 
                     dot = (
                         '<span class="news-sentiment-pos">&#9679;</span>' if art_sent == 'positive'
@@ -717,6 +723,6 @@ if st.session_state.all_reports:
                     st.markdown(f"""
                     <div class="news-item">
                         {dot} &nbsp; {title_html}
-                        <div class="news-meta">{fuente} &nbsp;·&nbsp; {published}</div>
+                        <div class="news-meta">{fuente} &nbsp;·&nbsp; {published} &nbsp;·&nbsp; {cat}</div>
                     </div>
                     """, unsafe_allow_html=True)

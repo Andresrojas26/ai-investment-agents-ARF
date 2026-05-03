@@ -6,7 +6,6 @@ NEWS_API_KEY = "966de9cfce8a4ab18b57222bad462146"
 
 
 def get_company_name(ticker: str) -> str:
-    """Obtiene el nombre real de la empresa desde yfinance para cualquier ticker."""
     try:
         info = yf.Ticker(ticker).info
         return info.get("longName") or info.get("shortName") or ticker
@@ -23,9 +22,9 @@ def get_news(ticker: str) -> list:
     url = (
         f"https://newsapi.org/v2/everything"
         f"?q={query}"
-        f"&searchIn=title"          # ✅ FIX: el nombre debe aparecer en el título
+        f"&searchIn=title"
         f"&language=en"
-        f"&pageSize=5"
+        f"&pageSize=8"          # ✅ Más artículos para mejor análisis
         f"&sortBy=publishedAt"
         f"&apiKey={NEWS_API_KEY}"
     )
@@ -54,7 +53,7 @@ def get_news(ticker: str) -> list:
         return [
             {
                 "title":       a.get("title", ""),
-                "description": a.get("description", ""),
+                "description": a.get("description", "") or "",
                 "url":         a.get("url", ""),
                 "source":      a.get("source", {}),
                 "publishedAt": a.get("publishedAt", ""),
@@ -69,3 +68,45 @@ def get_news(ticker: str) -> list:
     except Exception as e:
         print(f"[News Fetcher] Error inesperado: {e}")
         return []
+
+
+def get_macro_news() -> list:
+    """Obtiene noticias macroeconómicas globales."""
+    queries = [
+        "Federal Reserve interest rates",
+        "global economy inflation GDP",
+        "stock market outlook recession",
+    ]
+
+    all_articles = []
+
+    for query in queries:
+        url = (
+            f"https://newsapi.org/v2/everything"
+            f"?q={query}"
+            f"&searchIn=title"
+            f"&language=en"
+            f"&pageSize=3"
+            f"&sortBy=publishedAt"
+            f"&apiKey={NEWS_API_KEY}"
+        )
+        try:
+            response = requests.get(url, timeout=10)
+            if response.status_code != 200:
+                continue
+            data = response.json()
+            if data.get("status") != "ok":
+                continue
+            for a in data.get("articles", []):
+                if a.get("title"):
+                    all_articles.append({
+                        "title":       a.get("title", ""),
+                        "description": a.get("description", "") or "",
+                        "url":         a.get("url", ""),
+                        "source":      a.get("source", {}),
+                        "publishedAt": a.get("publishedAt", ""),
+                    })
+        except Exception:
+            continue
+
+    return all_articles
